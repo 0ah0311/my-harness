@@ -1,0 +1,45 @@
+gates:
+  collect:
+    file: output/01-references.md
+    conditions:
+      - file_exists: true
+      - item_count: ">= 3"
+    on_fail: delete_and_retry
+
+  analyze:
+    file: output/02-analysis.md
+    conditions:
+      - file_exists: true
+      - section_exists: "## 반영 포인트"
+    on_fail: delete_and_retry
+
+  spec:
+    file: output/03-spec.md
+    conditions:
+      - file_exists: true
+      - screen_count: ">= 1"
+    on_fail: delete_and_retry
+
+  validate:
+    file: output/07-validation.md
+    conditions:
+      - file_exists: true
+      - violation_count: "= 0"
+    on_fail: delete_and_retry
+
+human_approval:
+  step: 5
+  trigger_file: instructions/05-stakeholder-review.md
+  approve_keyword: "승인"
+  reject_keyword: "재작업"
+  on_reject:
+    delete: output/03-spec.md
+    retry: spec
+
+flags:
+  privacy_violation:
+    pattern: "(공개|전체 공개)"
+    scope: output/03-spec.md
+    action: insert_flag
+    flag: "<!-- FLAG: 비공개 원칙 확인 필요 -->"
+    block_until_keyword: "확인 완료"

@@ -1,0 +1,25 @@
+frame:
+  width: 390
+  height: 844
+
+collection:
+  min_references: 3
+
+spec:
+  min_screens: 1
+
+design:
+  corner_radius: [0, 16, 24, "full"]
+  colors:
+    ink: "#141414"
+    canvas: "#ffffff"
+    accent: "#0066ff"
+  font_family: "Pretendard"
+  font_weights: [300, 400, 600, 700]
+
+output:
+  dir: output
+  header_template: "<!-- agent: {agent} | input: {input} | created: {timestamp} -->"
+
+runs:
+  dir: runs

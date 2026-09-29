@@ -1,0 +1,7 @@
+node_modules/
+output/
+runs/
+instructions/
+*.local
+.DS_Store
+reference.png
