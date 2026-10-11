@@ -1,320 +1,201 @@
 ## Overview
 
-Huddling (허들링) is an AI practice lab and asset library — learning materials, skill/prompt cards, and member-made assets — and its own interface is engineered to get out of the way. The system is strictly monochrome: near-black ink (`{colors.ink}` — #141414) on a pure white canvas (`{colors.canvas}`), with structure carried by a ladder of barely-perceptible neutral tints rather than by shadows or color. The learning content, skill cards, example outputs, and member assets the app exists to show are the only saturated elements on any page — the chrome frames them the way a gallery wall frames paintings.
+SWIMMILE의 오늘의 물옷(Outfit)은 기록 화면 안에서 **캐릭터가 주인공이 되는 작은 개인화 레이어**다. 앱 본체는 흰 캔버스와 near-black 잉크(`{colors.ink}` — #161c1c) 위에 청록 브랜드(`{colors.brand}` — #31cfff)와 Milestone 컬러 9색이 포인트로 올라가는 구조이고, 물옷 화면은 이 크롬을 그대로 쓴다. 옵s션 편집 화면에서 채도가 높은 요소는 **캐릭터와 선택 가능한 색 스와치뿐**이며, 나머지 UI는 흰색·연회색 면과 잉크 텍스트로 조용히 물러난다. 캐릭터가 주인공이고 UI는 갤러리 벽이다.
 
-The geometry does the brand work that color refuses to do. Every interactive element is a stadium pill (`{rounded.full}`): the floating navigation bar, every button, the segmented billing toggle, the overlay badges. Containers sit at a calm `{rounded.md}` (24px), media tiles at `{rounded.sm}` (16px), and app icons render as iOS-style squircles at 30% corner radius. Type is set in Pretendard with strong weight contrast — Bold 700 for every heading, Regular 400 for text, Light 300 for lead subtitles — which gives the monochrome pages a strong typographic voice without a single decorative flourish.
+기하는 본체와 같다. 주요 버튼은 12px 라운드(`{rounded.lg}`)의 큰 버튼, 팝업은 16px(`{rounded.xl}`), 시트는 상단 24px(`{rounded.2xl}`), 스와치·토글은 원형(`{rounded.circle}`)이다. 타이포는 Pretendard 한 가지이며 Bold 700 제목 대 Regular 400 본문의 굵기 대비로 위계를 만든다.
 
-One color is allowed to interrupt: an electric blue accent (`{colors.accent}` — #0066ff), used exclusively for commercial signals — the "Popular" plan badge and the yearly-savings callout on pricing. Its scarcity is the point; when blue appears, it is asking for a decision.
+> 이 문서는 대략적인 초안이다. 토큰 값은 SWIMMILE Figma 변수에서 읽은 값을 기준으로 적었고, 개발 환경에서 토큰을 처음부터 다시 추출한 뒤 확정한다. 기능 정의는 `SWIMMILE_OUTFIT_SPEC_v0.1.md`를 따른다.
 
 **Key Characteristics:**
 
-- Gallery-white monochrome palette — `{colors.ink}` on `{colors.canvas}`, zero brand chroma outside the single `{colors.accent}` blue
-- Stadium-pill interaction language: nav bar, buttons, toggles, and badges all at `{rounded.full}`
-- Shadow-free elevation — hierarchy built from a neutral tint ladder (`{colors.canvas-soft}`, `{colors.field}`, `{colors.hairline}`) and 1px hairlines
-- Pretendard with weight contrast: 700 headings at 1.3–1.35 line-height, 400 body at 1.5, 300 light subtitles
-- iOS-style squircle icon tiles (30% radius) as a recurring visual motif across library counters and brand marquees
-- Content supplies the color: app screenshots, brand icons, and grayscale curator portraits carry all visual richness
-- Full-bleed near-black `{colors.ink}` footer with rounded top corners closes every page in polarity inversion
+- 흰 캔버스 + 잉크 텍스트, 캐릭터와 색 스와치만 채도를 가진다
+- 주요 CTA는 잉크 채움 버튼(브랜드 청록은 CTA에 쓰지 않는다), 보조 버튼은 연회색 채움
+- 그림자는 팝업·시트처럼 떠 있는 레이어에만 쓰고, 카드는 면 색 차이로 구분
+- 캐릭터는 항상 같은 캔버스·앵커를 쓰는 벡터 레이어 합성 (색은 코드에서 입힘)
+- 선택 상태는 잉크 2px 링으로 표시 (색에 의존하지 않음)
+- 모든 숫자·라벨은 Pretendard, 자간 0
 
 ## Colors
 
-Source pages: home, pricing, awards, signup.
-
 ### Brand & Accent
 
-- **Ink Black** (`{colors.primary}` — #141414): The brand color. Fills every primary CTA pill, the footer band, and all display typography. Huddling's identity is this near-black, softened just off pure black to sit comfortably next to photography.
-- **Electric Blue** (`{colors.accent}` — #0066ff): The only chromatic accent in the system. Reserved for commercial emphasis — the "Popular" pricing badge and savings callouts. Never used decoratively, never used for CTAs.
+- **Brand Cyan** (`{colors.brand}` — #31cfff): 브랜드 포인트. 진행바, 선택 강조 등 얇은 요소에만 쓴다. 버튼 채움으로 쓰지 않는다.
+- **Ink** (`{colors.ink}` — #161c1c): 주요 CTA 채움, 제목, 선택 링.
 
 ### Surface
 
-- **Canvas** (`{colors.canvas}` — #ffffff): Default page and card background across all pages.
-- **Soft Canvas** (`{colors.canvas-soft}` — #f3f3f3): The workhorse tint — a 6% ink wash over white. Fills the floating nav pill, the featured pricing card, FAQ accordion rows, soft utility pills, segmented-control tracks, and the highlighted comparison-table column.
-- **Field** (`{colors.field}` — #f0f0f0): An 8% ink wash used as the fill for form inputs, giving fields presence without borders.
-- **Soft Hairline** (`{colors.hairline-soft}` — #f0f0f0): 1px card outlines — the faintest possible edge, used on white-on-white cards (pricing, testimonials).
-- **Hairline** (`{colors.hairline}` — #e0e0e0): The stronger 16% control border, used on outlined pill buttons and interactive chrome.
+- **Canvas** (`{colors.canvas}` — #ffffff): 화면·시트·팝업 배경.
+- **Subtle** (`{colors.subtle}` — #f4f4f4): 보조 버튼 채움, 착장 카드 배경, 비활성 면.
+- **Border** (`{colors.border}` — #dfe2e7): 1px 구분선, 비선택 스와치 외곽.
+- **Dim** (`{colors.dim}` — #161c1c · 90%): 팝업·시트 뒤 오버레이.
 
 ### Text
 
-- **Ink** (`{colors.ink}` — #141414): Headings, body copy, and nav links.
-- **Soft Ink** (`{colors.ink-soft}` — #262626): Slightly lifted dark used for secondary lockups and the awards wordmark.
-- **Muted** (`{colors.text-muted}` — #707070): Secondary copy — supporting paragraphs, plan descriptions, vote counts, underlined inline links.
-- **Faint** (`{colors.text-faint}` — #adadad): Tertiary text — placeholders, de-emphasized footer links, fine print.
+- **Primary** (#161c1c), **Secondary**, **Tertiary**, **Disabled**: 본체 시맨틱 토큰을 그대로 따른다. 라벨은 Primary, 보조 설명은 Secondary.
+- **On Brand** (#ffffff): 잉크 버튼 위 텍스트.
 
-### Semantic
+### Outfit Palette (옵션 색, 12색 초안)
 
-- The system ships no dedicated success/warning/error palette on its marketing surfaces; state communication stays within the monochrome ladder, with `{colors.accent}` as the sole positive-emphasis signal.
+| 구분 | 색 | 비고 |
+|---|---|---|
+| Milestone 9색 | rime #b8e34b · yellow #ffd447 · orange #ff9638 · coral #ff6658 · skyblue #35b9e8 · vividblue #3476e8 · purple #9a54d6 · pink #e84e9b · deepblue #263d91 | 본체 Milestone 팔레트 재사용 |
+| 뉴트럴 3색 | 블랙 #161c1c · 화이트 #ffffff · 그레이 #9ca3af | 실제 수영복에 많은 무채색 |
+
+- 옵션 색은 hex가 아니라 **팔레트 키**로 저장한다. 팔레트를 바꿔도 과거 기록의 의미가 유지된다.
+- 화이트 스와치는 `{colors.border}` 외곽으로 캔버스와 구분한다.
+- 색만으로 구분이 되지 않도록 스와치에는 선택 시 체크 아이콘을 함께 표시한다.
 
 ## Typography
 
-### Font Family
+**Pretendard**를 모든 역할에 쓴다. 굵기는 Regular 400 / Medium 500 / Bold 700. 줄 높이는 크기의 1.5배다.
 
-**Pretendard** — a Korean–Latin neo-grotesque used exclusively, across every screen and every role. On the web it is loaded as **Pretendard Variable**; in Figma use the static weights (Light 300 · Regular 400 · SemiBold 600 · Bold 700). The brand's voice comes from weight contrast: headings at Bold 700, running text at Regular 400, and lead subtitles at a light 300. Fallback stack: `-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`.
+| Token | Size | Weight | Line Height | Use |
+|---|---|---|---|---|
+| `{typography.title-lg}` | 20px | 700 | 30px | 시트 제목 ("착장 선택") |
+| `{typography.title-sm}` | 18px | 700 | 27px | 팝업 제목, 섹션 제목 |
+| `{typography.body-lg}` | 16px | 400 / 700 | 24px | 본문, 버튼 라벨(700) |
+| `{typography.body-sm}` | 14px | 400 / 700 | 21px | 옵션 이름, 보조 설명 |
+| `{typography.caption-lg}` | 13px | 500 | 20px | 슬롯 탭 라벨, 스와치 이름 |
+| `{typography.caption-sm}` | 12px | 400 | 18px | 내 장비 이름의 보조 정보 |
 
-Sizes below are set for the mobile baseline frame (390×844). Korean glyphs need more vertical room than Latin, so headings sit at 1.3–1.35 and body text at 1.5.
-
-### Hierarchy
-
-| Token                    | Size | Weight | Line Height | Letter Spacing | Use                                                      |
-| ------------------------ | ---- | ------ | ----------- | -------------- | -------------------------------------------------------- |
-| `{typography.display}`   | 32px | 700    | 1.3         | 0              | Home hero statements and key counters                    |
-| `{typography.heading-1}` | 28px | 700    | 1.3         | 0              | Screen titles                                            |
-| `{typography.heading-2}` | 24px | 700    | 1.35        | 0              | Section headings on content screens                      |
-| `{typography.heading-3}` | 20px | 700    | 1.35        | 0              | Card-level headlines, auth headings                      |
-| `{typography.heading-4}` | 18px | 700    | 1.35        | 0              | Sub-section headings                                     |
-| `{typography.title}`     | 17px | 600    | 1.4         | 0              | Feature titles, emphasized rows                          |
-| `{typography.body-lg}`   | 17px | 300    | 1.5         | 0              | Lead paragraphs — the light counterpoint to 700 headings |
-| `{typography.body}`      | 15px | 400    | 1.5         | 0              | Default body copy                                        |
-| `{typography.body-sm}`   | 13px | 400    | 1.5         | 0              | Supporting copy, feature lists, legal text               |
-| `{typography.link}`      | 15px | 600    | 1.5         | 0              | Nav links and button labels                              |
-| `{typography.label}`     | 12px | 600    | 1.4         | 0              | Badge and pill labels                                    |
-| `{typography.caption}`   | 12px | 400    | 1.4         | 0              | Captions, metadata, form fine print                      |
-
-### Principles
-
-- **Weight contrast is the drama.** Pairing 700 headings against 300 light subtitles (e.g. 32px display over 17px light lead) creates hierarchy without color or ornament.
-- **Controlled leading.** Headings sit at 1.3–1.35 — tight, but with enough room for Korean glyphs. Body text opens up to 1.5.
-- **Zero letter-spacing everywhere.** Pretendard is trusted at its natural fit; no tracking adjustments at any size.
+- 제목은 Bold, 본문은 Regular. 강조는 굵기로만 만든다(색 강조 없음).
+- 내 장비 이름은 12자 이내이며 한 줄 말줄임으로 처리한다.
 
 ## Layout
 
 ### Spacing System
 
-- **Base unit**: 8px, with 4px half-steps for fine rhythm
-- **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.section}` 48px · `{spacing.section-lg}` 64px
-- Buttons are fixed-height pills padded horizontally at `{spacing.md}`; inputs pad `{spacing.sm} {spacing.md}`
-- Screen side padding is `{spacing.md}` (16px); sections are separated by `{spacing.section}` (48px), and `{spacing.section-lg}` (64px) separates major home-screen acts
+- 기본 단위 8px, 4px 반 단계. 토큰: 2 · 4 · 8 · 12 · 16 · 24 · 32 · 40 · 48 · 64.
+- 화면 좌우 패딩 24px(본체 기록 화면 기준), 시트 내부 패딩 24px, 팝업 내부 패딩 24px.
+- 같은 그룹 안 간격은 8~12px, 그룹 사이는 24px.
 
-### Grid & Container
+### Frame
 
-- Content rides a centered column: single-column centered lockups for heroes and award winners, a 2-up card grid for pricing plans, 3-up for portrait tiles, and a 4-column masonry for testimonials.
-- The floating nav pill is detached from the viewport edge and horizontally centered, rather than a full-width bar — the page canvas visibly wraps around it.
-- Marquee strips (brand logos, app screenshots) run full-bleed beyond the content column.
+- 기준 프레임 402 × 874 (본체 Figma와 동일). 최소 360px 폭에서도 가로 스크롤 없이 유지한다.
+- 하단 고정 버튼 영역: 버튼 높이 56px, 좌우 24px, 위 16px 여백 + 홈 인디케이터 34px.
 
-### Whitespace Philosophy
+### Character Stage
 
-Whitespace is the primary grouping device. Sections are separated by `{spacing.section}` to `{spacing.section-lg}` of empty canvas with no divider rules; within cards, generous `{spacing.lg}` padding keeps content off the hairline edges. The homepage alternates dense collage moments (icon clouds, screenshot grids) with near-empty typographic interludes — compression and release.
-
-### Responsive Strategy
-
-#### Screen Size
-
-MVP is designed mobile-first on a single baseline.
-
-| Name             | Width × Height | Notes                                                        |
-| ---------------- | -------------- | ------------------------------------------------------------ |
-| Baseline         | 390 × 844      | Default design frame for all key screens (Figma)             |
-| Minimum          | 360px width    | Layouts must hold without horizontal scroll; long text wraps |
-| Tablet / Desktop | —              | Out of MVP scope — to be defined after MVP                   |
-
-- Side padding: `{spacing.md}` (16px) on both sides at every width.
-- Content is single-column by default; grids collapse to one column at the minimum width.
-
-#### Touch Targets
-
-- Pill buttons and nav CTAs are fixed-height stadium shapes comfortably above the 44px minimum; form inputs pad to a similar height via `{spacing.sm} {spacing.md}`.
-- The segmented billing toggle presents each option as a full pill target, not a small radio dot.
-
-#### Collapsing Strategy
-
-- The floating `nav-pill` persists on scroll and across breakpoints, tightening to logomark + CTA on narrow screens.
-- Multi-column grids (pricing 2-up, portraits 3-up, testimonials 4-up) collapse column-by-column rather than reflowing horizontally.
-- The signup page's two-panel split (form left, angled screenshot marquee right) drops the marquee panel entirely on narrow viewports, keeping the centered form column.
-
-#### Image Behavior
-
-- App screenshots and device mockups keep fixed aspect ratios and `{rounded.md}` corners at all sizes.
-- Marquee strips overflow the viewport intentionally and animate horizontally; they crop rather than scale.
-- Curator portraits stay square-ish tiles, lazily loaded, always grayscale.
+- 기록 작성의 "수영 착장" 카드: 354 × 208, 캐릭터 약 63 × 160 중앙 배치.
+- 옵션 편집의 미리보기: 캐릭터를 카드 가운데에 크게 두고(화면 높이 약 40%), 옵션은 그 아래 영역에서 고른다.
+- 캐릭터는 항상 같은 캔버스 크기·같은 앵커를 쓰고, 어떤 목록·썸네일에서도 같은 렌더러를 재사용한다.
 
 ## Elevation & Depth
 
-| Level   | Treatment                                       | Use                                                   |
-| ------- | ----------------------------------------------- | ----------------------------------------------------- |
-| 0       | Flat on `{colors.canvas}`                       | Default — most of every page                          |
-| 1       | `{colors.canvas-soft}` fill, no border          | Nav pill, featured pricing card, FAQ rows, soft pills |
-| 2       | 1px `{colors.hairline-soft}` outline on white   | Pricing and testimonial cards                         |
-| 3       | 1px inset ring                                  | Comparison-table highlight column edge                |
-| Inverse | `{colors.ink}` fill, `{colors.on-primary}` text | Footer band, primary CTAs                             |
+| Level | Treatment | Use |
+|---|---|---|
+| 0 | 캔버스 위 평면 | 기본 화면 |
+| 1 | `{colors.subtle}` 채움, 테두리 없음 | 착장 카드, 내 장비 항목, 보조 버튼 |
+| 2 | 1px `{colors.border}` | 비선택 스와치·칩 |
+| 3 | 2px 잉크 링 | 선택된 스와치·칩·내 장비 항목 |
+| Overlay | `{colors.dim}` + 흰 면, 그림자 `0 10 10 rgba(22,28,28,0.1)` | 팝업, 바텀 시트 |
 
-The system is essentially shadow-free: no drop shadows appear on any card, button, or nav element. Elevation is communicated by _fill difference_ (white vs. 6–8% ink tints) and by hairlines, which keeps every surface print-flat and lets the screenshot content supply all depth cues. The one soft-shadow exception is the active segment of the segmented control, which lifts off its `{colors.canvas-soft}` track as a white pill.
-
-### Decorative Depth
-
-- **Glass monoliths** — the awards hero renders tall trophy pillars in a white-to-gray vertical gradient, reading as frosted glass against the `{colors.canvas-soft}` band; the page's only atmospheric gradient.
-- **Photography as depth** — floating app-icon squircles, angled screenshot collages (signup's rotated marquee panel), and device mockups create parallax-like layering on a flat canvas.
-- **Polarity inversion** — the `{colors.ink}` footer with `{rounded.md}` top corners acts as a heavy baseboard, giving each page a physical end-stop.
+- 카드는 그림자 없이 면 색으로 구분한다. 그림자는 화면 위로 뜨는 팝업·시트에만 쓴다.
 
 ## Shapes
 
-### Border Radius Scale
-
-| Token            | Value  | Use                                                               |
-| ---------------- | ------ | ----------------------------------------------------------------- |
-| `{rounded.none}` | 0px    | Full-bleed media strips and marquee images                        |
-| `{rounded.sm}`   | 16px   | Inputs, video tiles, testimonial cards, FAQ rows                  |
-| `{rounded.md}`   | 24px   | Content cards, device mockups, portrait tiles, footer top corners |
-| `{rounded.full}` | 9999px | Every pill: nav, buttons, badges, toggles                         |
-
-### Photography Geometry
-
-- App screenshots render inside device-shaped frames at `{rounded.md}`.
-- App icons use the signature 30% squircle radius (`app-icon-squircle`) — the iOS icon silhouette — at every size from 32px chips to 96px hero tiles.
-- Curator portraits are near-square tiles at `{rounded.md}`, always black-and-white, with name captions overlaid in `{colors.on-primary}` on a `badge-overlay` scrim near the lower edge.
-- Avatars in testimonial cards are small circles (`{rounded.full}`) with a tiny company logo badge overlapping the bottom-right corner.
+| Token | Value | Use |
+|---|---|---|
+| `{rounded.sm}` | 4px | 무늬 타일 내부 모서리 |
+| `{rounded.md}` | 8px | 작은 칩 |
+| `{rounded.lg}` | 12px | 버튼, 입력 칩, 내 장비 항목 |
+| `{rounded.xl}` | 16px | 팝업, 착장 카드 |
+| `{rounded.2xl}` | 24px | 바텀 시트 상단 모서리 |
+| `{rounded.circle}` | 9999px | 색 스와치, 슬롯 탭 토글 |
 
 ## Components
 
 ### Buttons
 
-**`button-primary`** — "Join for free", "Get started", "Continue", "View winners"
+**`button-primary`** — "적용", "저장", "확인"
+- 잉크 채움, 흰 라벨(`{typography.body-lg}` 700), 최소 높이 56px, `{rounded.lg}`
+- 비활성: `{colors.subtle}` 채움 + Disabled 텍스트
 
-- Fill `{colors.primary}`, label `{colors.on-primary}` in `{typography.link}`, shape `{rounded.full}`, padding `0px {spacing.md}` on a fixed-height pill
-- The single CTA style everywhere: nav, pricing cards, auth form, awards hero
+**`button-secondary`** — "취소", "새로 만들기"
+- `{colors.subtle}` 채움, 잉크 라벨, 같은 크기·라운드
 
-**`button-outline`** — "Continue with Google", secondary "Get started"
+**`button-underline`** — "수영 착장" 영역의 "변경"
+- 텍스트만, 밑줄, `{typography.caption-lg}`. 터치 영역은 최소 44px로 확장한다.
 
-- Fill `{colors.canvas}`, label `{colors.ink}`, 1px `{colors.hairline}` border, shape `{rounded.full}`
-- The de-emphasized twin of the primary pill; used when two actions sit side by side or for third-party auth
+### Outfit Card (기록 작성 · 기록 상세)
 
-**`button-pill-soft`** — "Explore ↗", "Huddling ↗", "Read more"
+- `{colors.subtle}` 채움, `{rounded.xl}`, 354 × 208, 캐릭터 중앙
+- 기록 작성: 상단에 "수영 착장" 라벨 + `button-underline`, 카드를 누르면 착장 선택 시트가 열림
+- 기록 상세: 같은 카드, 눌러도 이동하지 않음 (읽기 전용)
 
-- Fill `{colors.canvas-soft}`, label `{colors.ink}`, shape `{rounded.full}`
-- Tertiary utility pill for outbound and in-page links; no border, relies on its tint fill
+### Character Preview
 
-### Cards & Containers
+- 벡터 레이어 합성: 기본 체형 → 수영복 메인 → 무늬(메인 영역으로 마스크) → 수영복 포인트 → 수영복 라인 → 수모 → 수경
+- 옵션이 바뀌면 150ms 이내 즉시 반영한다. 큰 전환 애니메이션은 쓰지 않는다.
 
-**`pricing-card`** — default plan tier (Team)
+### Slot Tab (옵션 편집)
 
-- `{colors.canvas}` fill, 1px `{colors.hairline-soft}` outline, `{rounded.md}` corners
-- Plan name in `{typography.heading-4}`, price figure large with stacked `{typography.caption}` qualifiers, feature list rows in `{typography.body-sm}` with `{colors.text-muted}` icons
+- 수영복 · 수모 · 수경 세 개의 원형 토글 (`{rounded.circle}`). 선택된 탭은 잉크 채움 + 흰 라벨, 비선택은 `{colors.subtle}` 채움 + 잉크 라벨
+- 수모·수경 탭에는 착용 on/off 스위치를 함께 둔다.
 
-**`pricing-card-featured`** — highlighted plan tier (Pro)
+### Color Swatch
 
-- `{colors.canvas-soft}` fill, borderless, `{rounded.md}` corners — emphasis by tint, not by outline or polarity flip
-- Carries the `badge-popular` chip beside the plan name and a full-width `button-primary` CTA, while the default tier gets `button-outline`
+- 지름 40px 원 (터치 영역 44px), 12개를 한 줄에 6개씩 두 줄
+- 선택: 2px 잉크 링 + 체크 아이콘. 비선택: 1px `{colors.border}` (화이트 스와치만 외곽 필수)
+- 수영복은 "메인" / "포인트" 두 영역을 구분해 고른다(작은 세그먼트로 전환)
 
-**`testimonial-card`** — user quote tile
+### Shape Chip / Pattern Chip
 
-- `{colors.canvas}` fill, 1px `{colors.hairline-soft}` outline, `{rounded.sm}` corners
-- Circular avatar with overlapping company mini-badge, name in `{typography.link}`, company in `{colors.text-muted}` `{typography.body-sm}`, quote in `{typography.body}`
-- Laid out as a 4-column masonry of varying heights
+- 실루엣 3종, 무늬 5종을 56 × 56 칩으로 보여주고, 칩 안에는 선택된 색이 입혀진 미리보기를 넣는다.
+- 선택은 2px 잉크 링. 이름은 칩 아래 `{typography.caption-lg}`.
+- 무늬 크기(3단계)는 작은 세그먼트 컨트롤로 고른다.
 
-**`faq-row`** — accordion item
+### Outfit Sheet (바텀 시트)
 
-- Full-width `{colors.canvas-soft}` bar, `{rounded.sm}` corners, question in `{typography.body}` with a trailing chevron; rows stack with `{spacing.sm}` gaps
+- 흰 면, 상단 `{rounded.2xl}`, 핸들 바, 내부 패딩 24px, `{colors.dim}` 오버레이
+- **착장 선택 시트**: 상단 제목 + "새로 만들기" 보조 버튼, 아래에 내 장비 목록(최근 사용 순)
+- **옵션 편집**: 시트 또는 전체 화면. 상단 미리보기, 중간 슬롯 탭, 하단 옵션 영역, 맨 아래 "내 장비에 저장" 스위치 + `button-primary` "적용"
 
-**`portrait-tile`** — curator/juror grid cell
+### My Gear Item (내 장비 목록)
 
-- Grayscale photograph at `{rounded.md}`, name + role caption overlaid at bottom center in `{colors.on-primary}`
-- The strict black-and-white treatment keeps the people grid inside the monochrome system
+- `{colors.subtle}` 채움, `{rounded.lg}`, 높이 72px, 좌측 캐릭터 썸네일 + 이름(`{typography.body-lg}`) + 최근 사용일(`{typography.caption-sm}`)
+- 선택된 항목: 2px 잉크 링. 삭제는 더보기 메뉴에서 → 삭제 확인 팝업
 
-### Inputs & Forms
+### Popup (삭제 확인)
 
-**`text-input`**
+- 흰 면, `{rounded.xl}`, 패딩 24px, 폭 307px, 제목 `{typography.title-sm}`, 설명 `{typography.body-lg}`, 취소(보조) / 확인(주요) 두 버튼 가로 배치
+- 본체 저장 확인 팝업과 같은 컴포넌트를 재사용한다.
 
-- `{colors.field}` fill, no border, `{colors.ink}` text with `{colors.text-faint}` placeholder, `{rounded.sm}` corners, padding `{spacing.sm} {spacing.md}`
+### Toast
 
-**`text-input-focused`**
+- 하단에 떠서 2초 후 사라진다. 잉크 채움 + 흰 텍스트, `{rounded.lg}`. 문구: "내 장비에 저장했어요" 등
+- 수정 완료 토스트와 같은 컴포넌트를 쓴다.
 
-- Same chrome plus a 2px `{colors.ink}` ring — focus is signaled in ink, consistent with the monochrome system
+### Empty State
 
-### Navigation
+- 내 장비가 없을 때: 기본 착장 캐릭터 + 한 줄 안내 + "새로 만들기" 버튼
 
-**`nav-pill`** — Top Nav (Desktop)
+## Character & Asset Rules (개발 가능한 에셋을 위한 규칙)
 
-- A floating, horizontally-centered stadium bar in `{colors.canvas-soft}`: logomark + wordmark left, text links ("Pricing", "Awards", "Log in") in `{typography.link}` right, capped by a `button-primary` CTA
-- Detaches from the page edge with visible canvas above it; persists as a sticky element on scroll
-
-**Top Nav (Mobile)**
-
-- The pill tightens to logomark + CTA; links collapse behind the pill
-
-**Sub-nav (Awards)**
-
-- Minimal corner marks instead of a bar: logomark + section name top-left, a `button-pill-soft` "Huddling ↗" return link top-right
-
-### Signature Components
-
-**`app-icon-squircle`** — the recurring 30%-radius icon tile; floats in loose clouds around library counters, lines up in "Other nominees" rows, and anchors `brand-chip` entries
-
-**`brand-chip`** — marquee lockup of squircle icon + brand name in `{typography.heading-3}` ink; scrolls horizontally in full-bleed strips of recognizable products
-
-**`badge-popular`** — compact `{colors.accent}` chip with `{colors.on-primary}` label marking the featured pricing tier; the only blue element on the page
-
-**`badge-overlay`** — translucent gray pill (rgba(115, 115, 115, 0.56)) with `{colors.on-primary}` `{typography.label}` text, laid over photography and screenshots (category tags, portrait captions)
-
-**`segmented-control`** + **`segmented-control-active`** — billing-period toggle: a `{colors.canvas-soft}` stadium track holding two pill options; the active option is a `{colors.canvas}` white pill, the inactive label sits in `{colors.text-muted}`
-
-**`award-lockup`** — centered winner presentation: laurel-flanked category eyebrow in `{colors.text-muted}`, winner name in `{typography.heading-3}`, description in `{colors.text-muted}` `{typography.body}`, vote share in `{typography.body-sm}`, closed by a `button-pill-soft` "Explore ↗"
-
-**`compare-table`** — the pricing comparison grid: feature rows divided by 1px `{colors.canvas-soft}` rules, the recommended plan's column washed in `{colors.canvas-soft}` with an inset ring edge
-
-**`footer`** — full-width `{colors.ink}` band with `{rounded.md}` top corners: white wordmark at display scale, tagline in `{colors.text-faint}`, two columns of `{colors.text-faint}` links that read in `{colors.on-primary}` for emphasis rows
-
-### Examples (illustrative)
-
-> Kit-mirror demonstration surfaces. Each `ex-*` entry references brand-native primitives via token syntax so downstream consumers re-skin the same 10 surfaces consistently; none carries invented literal values.
-
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
-
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
-
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
-
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
-
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
-
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-empty-state-card`** — Empty-state illustration frame.
-
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
-
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
+1. 캐릭터 체형은 성별 2종으로 고정하고, 수영복·수모·수경의 착용 위치(앵커)를 먼저 정한다.
+2. 수영복은 색 영역(메인·포인트·라인)별로 **별도 도형**으로 만든다.
+3. 무늬는 단색 형태로 그리고 색은 코드에서 입힌다. (그라데이션도 코드에서 처리하거나 단색 형태로 표현)
+4. 모든 실루엣은 같은 캔버스 크기와 앵커를 쓴다.
+5. 벡터(PDF/SVG)로 납품하고 레이어 이름을 키와 일치시킨다: `suit_main`, `suit_accent`, `suit_line`, `cap`, `goggles`, `body_{female|male}`.
+6. 색만으로 구분되지 않도록 실루엣과 무늬로도 차이가 보이게 한다.
+7. 로고·브랜드·텍스트가 들어가는 디자인은 만들지 않는다.
 
 ## Do's and Don'ts
 
 ### Do
 
-- Keep the canvas `{colors.canvas}` white and let imported content (screenshots, icons, logos) supply all saturation.
-- Use `{rounded.full}` for every interactive element — a rectangular button does not exist in this system.
-- Build emphasis with the tint ladder: `{colors.canvas-soft}` fill for featured surfaces, `{colors.hairline-soft}` outlines for resting cards.
-- Reserve `{colors.accent}` for commercial signals (featured badges, savings callouts) — one or two blue elements per page at most.
-- Set every heading in Pretendard Bold 700 with line-height 1.3–1.35.
-- Pair Bold 700 headings with 300-weight `{typography.body-lg}` subtitles for hierarchy without color.
-- Render app icons as 30% squircles and portraits in grayscale to keep third-party imagery inside the system.
-- Close pages with the inverse `{colors.ink}` footer, rounded at the top.
+- 캐릭터와 색 스와치만 채도를 가지게 하고 나머지 UI는 흰색·연회색·잉크로 둔다.
+- 주요 CTA는 항상 잉크 채움 버튼, 보조는 연회색 채움 버튼으로 통일한다.
+- 선택 상태는 2px 잉크 링 + 아이콘으로 표시한다.
+- 지난번 착장이 기본으로 채워지도록 하고, 착장 변경 UI는 한 번의 탭으로 열리게 한다.
+- 모든 터치 영역을 44px 이상으로 확보한다(스와치 40px는 터치 영역 44px).
+- 카드 구분은 면 색(`{colors.subtle}`)으로, 그림자는 팝업·시트에만 쓴다.
 
 ### Don't
 
-- Don't add drop shadows — elevation is fills and hairlines only.
-- Don't use `{colors.accent}` for CTAs; primary actions are always `{colors.primary}` ink pills.
-- Don't introduce additional accent hues, gradients on UI chrome, or colored section bands.
-- Don't outline the featured pricing tier — feature it with the `{colors.canvas-soft}` fill and `badge-popular` instead.
-- Don't apply letter-spacing or all-caps styling; the type system runs at natural tracking in sentence case.
-- Don't put borders on form fields at rest — inputs are `{colors.field}` tint fills; the border appears only as the 2px ink focus ring.
-- Don't let full-color photography of people into the curator/juror grids; portraits are strictly black-and-white.
-- Don't square off pill geometry at small sizes — badges, chips, and toggles stay stadium-shaped.
+- 브랜드 청록(`{colors.brand}`)을 CTA 채움이나 큰 면에 쓰지 않는다.
+- UI 크롬(버튼, 카드, 시트)에 그라데이션이나 그림자를 추가하지 않는다.
+- 착장 설정을 필수처럼 보이게 하지 않는다. (필수 표시 `*`, 저장 버튼 비활성 조건 모두 금지)
+- 무늬·실루엣 변형을 늘리려고 에셋을 추가하지 않는다. 조합(색·크기)으로 늘린다.
+- 도감·수집·랭킹처럼 보이는 UI(획득 표시, 숫자 카운터)를 넣지 않는다.
+- 수영복 외 아이템(오리발 등)이나 로고 입력을 만들지 않는다.

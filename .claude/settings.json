@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Read(*)",
+      "Write(output/*)",
+      "Write(instructions/*)"
+    ],
+    "deny": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node harness/scripts/guard-write.mjs \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node harness/scripts/guard-judge-bash.mjs \"$CLAUDE_TOOL_INPUT_COMMAND\""
+          }
+        ]
+      }
+    ]
+  }
+}

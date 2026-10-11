@@ -1,7 +1,17 @@
-node_modules/
-output/
-runs/
-instructions/
-*.local
+# macOS
 .DS_Store
-reference.png
+
+# 하네스 실행 결과물 (실행마다 재생성됨)
+# output/
+# instructions/
+# 위 두 줄 주석 해제 시 생성 결과물을 git에서 제외
+
+# 런 상태 파일
+runs/*
+!runs/.gitkeep
+
+# 의존성
+node_modules/
+
+# 로그
+*.log

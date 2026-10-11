@@ -1,54 +1,86 @@
-// 게이트 조건 전체 검증 — rules.yaml 기준
-import fs from "fs";
-import path from "path";
-import yaml from "js-yaml";
+#!/usr/bin/env node
+// harness/scripts/verify.mjs
+// 단계별 게이트 조건 검증
 
-const ROOT = path.resolve(import.meta.dirname, "../..");
-const rulesPath = path.resolve(import.meta.dirname, "../rules.yaml");
-const rules = yaml.load(fs.readFileSync(rulesPath, "utf8"));
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 
-let allPassed = true;
+const ROOT = process.cwd();
 
-for (const [step, gate] of Object.entries(rules.gates)) {
-  const filePath = path.join(ROOT, gate.file);
-  const exists = fs.existsSync(filePath);
-
-  if (!exists) {
-    console.error(`[FAIL] ${step}: ${gate.file} 없음`);
-    allPassed = false;
-    continue;
-  }
-
-  const content = fs.readFileSync(filePath, "utf8");
-
-  for (const condition of gate.conditions) {
-    if (condition.file_exists !== undefined) continue;
-
-    if (condition.section_exists) {
-      if (!content.includes(condition.section_exists)) {
-        console.error(`[FAIL] ${step}: "${condition.section_exists}" 섹션 없음`);
-        allPassed = false;
-      }
-    }
-
-    if (condition.item_count) {
-      const count = (content.match(/^## /gm) || []).length;
-      const min = parseInt(condition.item_count.replace(">= ", ""));
-      if (count < min) {
-        console.error(`[FAIL] ${step}: 항목 수 ${count} < ${min}`);
-        allPassed = false;
-      }
-    }
-
-    if (condition.violation_count) {
-      if (content.includes("| ") && !content.includes("없음")) {
-        console.error(`[FAIL] ${step}: 위반 항목 존재`);
-        allPassed = false;
-      }
-    }
-  }
-
-  if (allPassed) console.log(`[PASS] ${step}`);
+function countTableRows(content) {
+  return content.split('\n').filter(l => l.trim().match(/^\|[^-|]/) ).length;
 }
 
-process.exit(allPassed ? 0 : 1);
+function sectionExists(content, heading) {
+  return content.includes(heading);
+}
+
+const gates = [
+  {
+    step: 1,
+    file: 'output/01-references.md',
+    check: (content) => {
+      const count = countTableRows(content);
+      if (count < 3) return { pass: false, reason: `항목 수 ${count} < 3` };
+      return { pass: true };
+    }
+  },
+  {
+    step: 2,
+    file: 'output/02-analysis.md',
+    check: (content) => {
+      if (!sectionExists(content, '## 반영 포인트'))
+        return { pass: false, reason: '## 반영 포인트 섹션 없음' };
+      return { pass: true };
+    }
+  },
+  {
+    step: 3,
+    file: 'output/03-spec.md',
+    check: (content) => {
+      const count = countTableRows(content);
+      if (count < 1) return { pass: false, reason: '화면 항목 수 < 1' };
+      return { pass: true };
+    }
+  },
+  {
+    step: 7,
+    file: 'output/07-validation.md',
+    check: (content) => {
+      const match = content.match(/위반 항목 수[^\n]*\n+(\d+)/);
+      const count = match ? parseInt(match[1]) : null;
+      if (count === null) return { pass: false, reason: '위반 항목 수 파싱 불가' };
+      if (count !== 0) return { pass: false, reason: `위반 항목 ${count}개` };
+      return { pass: true };
+    }
+  }
+];
+
+const step = parseInt(process.argv[2]);
+if (!step) {
+  console.error('사용법: node verify.mjs <단계번호>');
+  process.exit(1);
+}
+
+const gate = gates.find(g => g.step === step);
+if (!gate) {
+  console.log(`단계 ${step}: 기계 판정 없음 (사람 확인 필요)`);
+  process.exit(0);
+}
+
+const filePath = join(ROOT, gate.file);
+if (!existsSync(filePath)) {
+  console.error(`파일 없음: ${gate.file}`);
+  process.exit(1);
+}
+
+const content = readFileSync(filePath, 'utf-8');
+const result = gate.check(content);
+
+if (result.pass) {
+  console.log(`단계 ${step}: 통과`);
+  process.exit(0);
+} else {
+  console.error(`단계 ${step}: 실패 — ${result.reason}`);
+  process.exit(1);
+}

@@ -14,7 +14,7 @@
 | 1 | collect | uibowl MCP | output/01-references.md |
 | 2 | analyze | output/01-references.md | output/02-analysis.md |
 | 3 | spec | output/02-analysis.md | output/03-spec.md |
-| 4 | (보조) | output/03-spec.md | instructions/04-figma-keyscreen.md |
+| 4 | figma-keyscreen | instructions/04-figma-keyscreen.md | output/04-figma-result.md + Figma 프레임 |
 | 5 | (보조·사람 승인) | output/03-spec.md | instructions/05-stakeholder-review.md |
 | 6 | (보조) | 확정 시안 | instructions/06-tokens-components.md |
 | 7 | validate | output/03-spec.md + docs/design.md | output/07-validation.md |
@@ -25,13 +25,28 @@
 
 ## 3. 게이트 조건
 
-| 단계 | 통과 조건 | 실패 시 |
-|---|---|---|
-| collect | 01-references.md 존재 AND 항목 수 ≥ 3 | 파일 삭제 → collect 재실행 |
-| analyze | 02-analysis.md 존재 AND ## 반영 포인트 섹션 존재 | 파일 삭제 → analyze 재실행 |
-| spec | 03-spec.md 존재 AND 화면 항목 수 ≥ 1 | 파일 삭제 → spec 재실행 |
-| validate | 07-validation.md 존재 AND 위반 항목 수 = 0 | 파일 삭제 → validate 재실행 |
-| 5단계 사람 승인 | 사람이 "승인" 입력 | "재작업" → 03-spec.md 삭제 → spec 재실행 |
+| 단계 | 통과 조건 | 판정 주체 | 실패 시 |
+|---|---|---|---|
+| 1. 수집 | 01-references.md 존재 AND 항목 수 ≥ 3 | 기계 | 파일 삭제 → collect 재실행 |
+| 2. 분석 | 02-analysis.md 존재 AND ## 반영 포인트 섹션 존재 | 기계 | 파일 삭제 → analyze 재실행 |
+| 3. 설계 | 03-spec.md 존재 AND 화면 항목 수 ≥ 1 | 기계 | 파일 삭제 → spec 재실행 |
+| 4. 키스크린 | 04-figma-result.md 존재 AND Figma 프레임 URL 2~3개 기록 | 기계 | 파일 삭제 → figma-keyscreen 재실행 |
+| 5. 협의 | 사람이 "승인" 입력 | **사람** | "재작업" → 03-spec.md 삭제 → spec 재실행 |
+| 7. 검토 | 07-validation.md 존재 AND 아래 체크리스트 위반 항목 수 = 0 | 기계 | 파일 삭제 → validate 재실행 |
+
+### 7단계 validate 체크리스트
+
+**design.md 기반 (디자인 규칙)**
+- [ ] 모서리 값이 4/8/12/16/24/9999px 이외 값을 사용하지 않는다
+- [ ] 브랜드 청록(#31cfff)을 버튼 채움 또는 큰 면에 사용하지 않는다
+- [ ] 카드·버튼에 그림자를 사용하지 않는다 (그림자는 팝업·시트에만 허용)
+- [ ] 착장을 필수 입력으로 표시하지 않는다 (필수 표시 * 또는 저장 버튼 비활성 조건 금지)
+- [ ] 선택 상태를 색만으로 표시하지 않는다 (2px 잉크 링 필수)
+
+**prd.md 기반 (기능 조건)**
+- [ ] "착장을 설정하지 않아도 기록 저장 가능"이 spec에 명시됐다
+- [ ] "착장은 다음 기록에서 자동으로 채워진다"가 spec에 명시됐다
+- [ ] "내 장비 수정·삭제 시 이전 기록 착장은 변하지 않는다"가 spec에 명시됐다
 
 ## 4. 편집 권한
 
@@ -40,6 +55,7 @@
 | collect | output/ | docs/ |
 | analyze | output/ | docs/ |
 | spec | output/, instructions/ | docs/ |
+| figma-keyscreen | output/ | docs/, instructions/04-figma-keyscreen.md |
 | validate | output/ | docs/, output/03-spec.md |
 | 오케스트레이터 | 없음 | 전체 |
 
@@ -56,4 +72,4 @@
 
 파일 없음·MCP 오류·모호한 지시 발생 시:
 - 추측해서 진행 금지
-- 멈추고 사람에게 한 줄 질문 후 대기
+- 멈추고 사람에게 한 줄 질문 후 대기 (긴 설명 금지)

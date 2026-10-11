@@ -1,25 +1,25 @@
-frame:
-  width: 390
-  height: 844
+# 허들링 하네스 — 기본값
 
-collection:
-  min_references: 3
+pipeline:
+  output_folder: output
+  instructions_folder: instructions
+  resume: true
+  resume_pattern: "output/NN-*.md"
 
-spec:
-  min_screens: 1
+file:
+  header: "<!-- agent: {name} | input: {path} | created: {timestamp} -->"
+  auto_create_folders:
+    - output
+    - instructions
 
-design:
-  corner_radius: [0, 16, 24, "full"]
-  colors:
-    ink: "#141414"
-    canvas: "#ffffff"
-    accent: "#0066ff"
-  font_family: "Pretendard"
-  font_weights: [300, 400, 600, 700]
+triggers:
+  start: "허들링 레퍼런스 수집 시작해줘"
+  restart: "{N}단계부터 다시 시작해줘"
 
-output:
-  dir: output
-  header_template: "<!-- agent: {agent} | input: {input} | created: {timestamp} -->"
+uncertainty:
+  action: stop_and_ask
+  format: "한 줄 질문 + 기다리는 이유 1줄"
 
-runs:
-  dir: runs
+keyscreen:
+  count: "2..3"
+  size: "390x844"
