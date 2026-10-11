@@ -2,9 +2,8 @@
 .DS_Store
 
 # 하네스 실행 결과물 (실행마다 재생성됨)
-# output/
-# instructions/
-# 위 두 줄 주석 해제 시 생성 결과물을 git에서 제외
+output/
+instructions/
 
 # 런 상태 파일
 runs/*
